@@ -6,6 +6,7 @@ import { clerkWebhookHandler } from "./webhooks/clerk";
 import { getEnv } from "./lib/env";
 import fs from "node:fs";
 import path from "node:path";
+import job from "./lib/cron";
 
 const env = getEnv();
 
@@ -45,5 +46,8 @@ if (fs.existsSync(publicDir)) {
 }
 
 app.listen(env.PORT, () => {
-  console.log(`Server is running on port ${env.PORT}`);
+  console.log("Listening on port:", env.PORT);
+  if (env.NODE_ENV === "production") {
+    job.start();
+  }
 });
